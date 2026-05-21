@@ -1,5 +1,5 @@
-// 5ºpasso: Criar o metodo POST
-//Agora o usuario poderá atualizar um pedido novo
+// 6ºpasso: Criar o metodo DELETE
+//Agora o usuario poderá deletar um pedido
 const http = require('http');
 const url = require('url');
 
@@ -8,8 +8,7 @@ let pedidos = [{
     cliente: "Fernanda",
     produto: "Hamburguer",
     status: "pendente"
-}
- ];
+}];
 
 const server = http.createServer((req, res) => {
     res.setHeader('Content-Type', "application/JSON");
@@ -20,7 +19,7 @@ const server = http.createServer((req, res) => {
     const metodo = req.method;
 
     //Metodo GET
-    if(rota === '/pedidos' && metodo === 'GET'){
+    if (rota === '/pedidos' && metodo === 'GET') {
         res.end(JSON.stringify({
             mensagem: "Lista de pedidos",
             dados: pedidos
@@ -29,14 +28,14 @@ const server = http.createServer((req, res) => {
     }
 
     //Metodo POST
-    if(rota === '/pedidos' && metodo ==='POST'){
+    if (rota === '/pedidos' && metodo === 'POST') {
         let body = '';
-        
-        req.on('data', parte =>{
-            body+=parte
+
+        req.on('data', parte => {
+            body += parte
         });
 
-        req.on('end', () =>{
+        req.on('end', () => {
             const novoPedido = JSON.parse(body);
             pedidos.push(novoPedido);
 
@@ -49,35 +48,64 @@ const server = http.createServer((req, res) => {
         return;
     }
     //Metodo PUT
-    if( rota === '/pedidos' && metodo === 'PUT'){
+    if (rota === '/pedidos' && metodo === 'PUT') {
         let body = '';
-        req.on('data', parte =>{
-            body+=parte;
+        req.on('data', parte => {
+            body += parte;
         });
-        req.on('end', ()=>{
+        req.on('end', () => {
             const dados = JSON.parse(body);
             let encontrado = false;
 
-            pedidos = pedidos.map(pedido =>{
-                if(pedido.id === dados.id){
+            pedidos = pedidos.map(pedido => {
+                if (pedido.id === dados.id) {
                     encontrado = true;
-                    return{
+                    return {
                         ...pedido,
                         status: dados.status
                     };
 
                 }
-                 return pedido;
+                return pedido;
             });
-            if(!encontrado){
-                res.statusCode= 404;
+            if (!encontrado) {
+                res.statusCode = 404;
                 res.end(JSON.stringify({
-                    mensagem:"pedido Não encontrado"
+                    mensagem: "pedido Não encontrado"
                 }));
                 return;
             }
             res.end(JSON.stringify({
-                mensagem:"pedido atualizado com sucesso",
+                mensagem: "pedido atualizado com sucesso",
+                dados: pedidos
+            }));
+        });
+        return;
+    }
+
+
+
+
+    //METODO DELETE
+
+    if (rota === '/pedidos' && metodo === 'DELETE') {
+        let body = ''
+        req.on('data', parte => {
+            body += parte
+        });
+        req.on('end', () => {
+            const dados = JSON.parse(body);
+            const tamanhoAntes = pedidos.length;
+            pedidos = pedidos.filter(pedido => pedido.id !== dados.id);
+            if (pedidos.length === tamanhoAntes) {
+                res.statusCode = 404;
+                res.end(JSON.stringify({
+                    mensagem: "Pedido não encontrado"
+                }));
+                return;
+            }
+            res.end(JSON.stringify({
+                mensagem: "Pedido removido",
                 dados: pedidos
             }))
         });
@@ -87,9 +115,8 @@ const server = http.createServer((req, res) => {
     res.statusCode = 404;
     res.end(JSON.stringify({
         mensagem: "ROTA NÃO ENCONTRADA"
-    }))
+    }));
 });
-
 server.listen(3000, () => {
     console.log('servidor running in http://localhost:3000');
 });

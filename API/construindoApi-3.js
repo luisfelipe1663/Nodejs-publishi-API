@@ -7,7 +7,8 @@ let pedidos = [{
     cliente: "Fernanda",
     produto: "Hamburguer",
     status: "pendente"
-}, ];
+}
+ ];
 
 const server = http.createServer((req, res) => {
     res.setHeader('Content-Type', "application/JSON");
