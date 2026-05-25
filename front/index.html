@@ -16,20 +16,20 @@
         <h2>Novo Pedido</h2>
         <input type="text" id="cliente" placeholder="Nome do Cliente">
         <input type="text" id="produto" placeholder="Produto">
-        <button onclick="">Cadastrar pedido</button>
+        <button onclick="cadastrarPedido()">Cadastrar pedido</button>
 
         <!--AREA DE ATUALIZAÇÃO-->
         <h2>Atualizar status</h2>
         <input type="number" id="idAtualizar" placeholder="ID do Pedido">
         <input type="text" id="statusAtualizar" placeholder="Novo Status">
-        <button onclick="">Atualizar</button>
+        <button onclick="AtualizarPedido()">Atualizar</button>
         <!--Area de excluir-->
         <h2>Cancelar pedido</h2>
         <input type="number" id="idRemover" placeholder="ID do Pedido">
-        <button onclick=""> Cancelar</button>
+        <button onclick="removerPedido()"> Cancelar</button>
         <!-- Lista de Pedido-->
          <h2>Lista de pedidos</h2>
-         <ul id="Lista">Carregando pedidos...
+         <ul id="lista">Carregando pedidos...
          </ul>
     </div>
     <script src="script.js"></script>
